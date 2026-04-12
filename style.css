@@ -1,0 +1,1371 @@
+/* ============================================================
+   全球名胜图鉴 - 天蓝色主题样式
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --pink: #4DB6E5;
+  --light-pink: #B3E5FC;
+  --soft-pink: #E1F5FE;
+  --purple: #5C9CE6;
+  --light-purple: #BBDEFB;
+  --soft-purple: #E3F2FD;
+  --green: #85D4A0;
+  --light-green: #C8F0D8;
+  --yellow: #FFD94A;
+  --light-yellow: #FFFACD;
+  --blue: #42A5F5;
+  --light-blue: #90CAF9;
+  --white: #FFFEF9;
+  --cream: #F0F8FF;
+  --dark: #1A3A5C;
+  --text-main: #1E3A5F;
+  --text-sub: #5B8DB8;
+  --text-light: #90B4D2;
+  --shadow: rgba(66, 165, 245, 0.25);
+  --shadow-strong: rgba(66, 165, 245, 0.5);
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --panel-bg: rgba(240, 248, 255, 0.95);
+  --border: rgba(66, 165, 245, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Nunito', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: linear-gradient(135deg, #0a1628 0%, #0d2b4a 30%, #0a1628 70%, #0d2040 100%);
+  color: var(--text-main);
+}
+
+/* ============================================================
+   页面布局
+   ============================================================ */
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#globe-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* ============================================================
+   平面世界地图
+   ============================================================ */
+
+#map-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(135deg, #0d1b2a 0%, #1a2e45 50%, #0d1b2a 100%);
+  overflow: hidden;
+}
+
+#world-map-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: crosshair;
+  image-rendering: crisp-edges;
+}
+
+/* 视图切换 Tab */
+#view-tabs {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 30;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.view-tab {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-light);
+  font-size: 12px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.view-tab:hover {
+  background: rgba(66, 165, 245, 0.2);
+  color: var(--pink);
+  transform: translateY(-2px);
+}
+
+.view-tab.active {
+  background: linear-gradient(135deg, rgba(66, 165, 245, 0.35), rgba(92, 156, 230, 0.35));
+  border-color: var(--pink);
+  color: #B3E5FC;
+}
+
+/* 音乐播放器 */
+#music-widget {
+  position: absolute;
+  top: 16px;
+  left: 230px;
+  z-index: 30;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+#music-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-light);
+  font-size: 16px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s, transform 0.15s, box-shadow 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+#music-btn:hover {
+  background: rgba(66, 165, 245, 0.25);
+  transform: scale(1.1);
+}
+
+#music-btn.has-music {
+  border-color: rgba(255, 217, 74, 0.5);
+}
+
+#music-btn.playing {
+  background: linear-gradient(135deg, rgba(66, 165, 245, 0.4), rgba(92, 156, 230, 0.4));
+  border-color: var(--pink);
+  box-shadow: 0 0 12px rgba(66, 165, 245, 0.4);
+  animation: music-rotate 3s linear infinite;
+}
+
+#music-btn.pulse {
+  animation: music-pulse 0.6s ease;
+}
+
+@keyframes music-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes music-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+#music-upload-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-light);
+  font-size: 11px;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+#music-upload-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.1);
+}
+
+/* ============================================================
+   顶部标题栏
+   ============================================================ */
+
+#header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  background: linear-gradient(to bottom, rgba(10, 22, 40, 0.95) 0%, rgba(10, 22, 40, 0) 100%);
+  pointer-events: none;
+}
+
+.header-title {
+  text-align: center;
+  pointer-events: all;
+}
+
+.header-title h1 {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #B3E5FC 0%, #BBDEFB 50%, #90CAF9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+  text-shadow: none;
+  filter: drop-shadow(0 0 8px rgba(66, 165, 245, 0.6));
+}
+
+.header-title p {
+  font-size: 12px;
+  color: var(--text-light);
+  letter-spacing: 3px;
+  margin-top: 2px;
+  opacity: 0.8;
+}
+
+/* 装饰星星 */
+.star-decor {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.2; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ============================================================
+   统计信息条
+   ============================================================ */
+
+#stats-bar {
+  position: absolute;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.stat-chip {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-chip.flowers { background: rgba(66, 165, 245, 0.25); color: #90CAF9; }
+.stat-chip.regions { background: rgba(92, 156, 230, 0.25); color: #7EB8E0; }
+.stat-chip.countries { background: rgba(133, 212, 160, 0.25); color: #A8E8BE; }
+
+/* ============================================================
+   侧边控制面板
+   ============================================================ */
+
+#side-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+#side-panel.collapsed {
+  transform: translateX(280px);
+}
+
+#panel-toggle {
+  position: absolute;
+  left: -38px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 80px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-shadow: -4px 0 12px var(--shadow);
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+#panel-toggle:hover {
+  background: white;
+}
+
+#panel-toggle-icon {
+  font-size: 16px;
+  transition: transform 0.3s;
+}
+
+#side-panel.collapsed #panel-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* 搜索区域 */
+#search-section {
+  background: var(--panel-bg);
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 80px 16px 16px;
+  flex-shrink: 0;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+#search-input {
+  width: 100%;
+  padding: 10px 36px 10px 36px;
+  border: 2px solid var(--border);
+  border-radius: 24px;
+  background: white;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#search-input:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.15);
+}
+
+#search-input::placeholder {
+  color: var(--text-light);
+}
+
+.search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.5;
+  padding: 4px;
+  border-radius: 50%;
+  transition: opacity 0.2s, background 0.2s;
+  display: none;
+}
+
+.search-clear:hover {
+  opacity: 1;
+  background: var(--light-pink);
+}
+
+/* 筛选区域 */
+#filter-section {
+  background: var(--panel-bg);
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  flex-shrink: 0;
+}
+
+.filter-group {
+  margin-bottom: 12px;
+}
+
+.filter-group:last-child {
+  margin-bottom: 0;
+}
+
+.filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.filter-chip {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--text-sub);
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.filter-chip:hover {
+  border-color: var(--pink);
+  color: var(--pink);
+  background: var(--soft-pink);
+}
+
+.filter-chip.active {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: white;
+  box-shadow: 0 2px 8px rgba(66, 165, 245, 0.4);
+}
+
+/* 月份筛选 */
+.month-chips {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+}
+
+.month-chip {
+  padding: 3px 0;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--text-sub);
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.month-chip:hover {
+  border-color: var(--purple);
+  color: var(--purple);
+  background: var(--soft-purple);
+}
+
+.month-chip.active {
+  background: var(--purple);
+  border-color: var(--purple);
+  color: white;
+  box-shadow: 0 2px 6px rgba(92, 156, 230, 0.4);
+}
+
+/* 国家筛选（可折叠） */
+.filter-label-toggle {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+
+.filter-label-toggle:hover {
+  color: var(--pink);
+}
+
+.toggle-arrow {
+  font-size: 10px;
+  transition: transform 0.3s;
+}
+
+.country-chips-wrap {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+  opacity: 1;
+}
+
+.country-chips-wrap.collapsed {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.country-chips-wrap::-webkit-scrollbar {
+  width: 3px;
+}
+
+.country-chips-wrap::-webkit-scrollbar-thumb {
+  background: rgba(144, 202, 249, 0.3);
+  border-radius: 2px;
+}
+
+.country-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.country-chip {
+  font-size: 10px;
+  padding: 2px 7px;
+}
+
+/* 花卉列表区域 */
+#flowers-list {
+  flex: 1;
+  background: var(--panel-bg);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  padding: 8px;
+}
+
+#flowers-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+#flowers-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#flowers-list::-webkit-scrollbar-thumb {
+  background: var(--light-purple);
+  border-radius: 2px;
+}
+
+.flowers-list-header {
+  padding: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-sub);
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+
+.flower-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1.5px solid transparent;
+  margin-bottom: 3px;
+}
+
+.flower-list-item:hover {
+  background: white;
+  border-color: var(--border);
+  transform: translateX(-2px);
+  box-shadow: 2px 2px 8px var(--shadow);
+}
+
+.flower-list-item.active {
+  background: var(--soft-pink);
+  border-color: var(--pink);
+  box-shadow: 2px 2px 10px rgba(66, 165, 245, 0.2);
+}
+
+.flower-emoji-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.flower-list-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.flower-list-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.flower-list-meta {
+  font-size: 10px;
+  color: var(--text-light);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bloom-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-light);
+}
+
+.empty-state .emoji {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   花卉详情卡片
+   ============================================================ */
+
+#flower-detail {
+  position: absolute;
+  z-index: 20;
+  width: 340px;
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--border);
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.9) translateY(10px);
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 100px);
+}
+
+#flower-detail.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: all;
+}
+
+.detail-header {
+  padding: 20px;
+  background: linear-gradient(135deg, var(--soft-pink) 0%, var(--soft-purple) 100%);
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-emoji {
+  font-size: 48px;
+  line-height: 1;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 4px 8px rgba(92, 156, 230, 0.4));
+  animation: floatEmoji 3s ease-in-out infinite;
+}
+
+@keyframes floatEmoji {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.detail-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.detail-name-en {
+  font-size: 12px;
+  color: var(--text-sub);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+.detail-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.detail-badge {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.badge-country {
+  background: var(--light-pink);
+  color: #D8608A;
+}
+
+.badge-season {
+  background: var(--light-yellow);
+  color: #B8860B;
+}
+
+.badge-category {
+  background: var(--light-green);
+  color: #2E7D32;
+}
+
+.detail-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.detail-close:hover {
+  background: white;
+  transform: rotate(90deg);
+}
+
+/* 花卉插图区域 */
+.detail-image-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--soft-pink) 0%, var(--soft-purple) 100%);
+  flex-shrink: 0;
+}
+
+.detail-image-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.detail-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.detail-image.loaded {
+  opacity: 1;
+}
+
+.detail-image.loaded + .detail-image-loading {
+  display: none;
+}
+
+.detail-image-link {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--text-sub);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-decoration: none;
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border);
+  transition: background 0.2s, transform 0.2s;
+}
+
+/* 花卉插图操作区（上传按钮 + 维基链接） */
+.detail-image-actions {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 0 10px;
+  pointer-events: none;
+}
+
+.detail-image-actions > * {
+  pointer-events: auto;
+}
+
+.upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--text-sub, #6B5B8C);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border, rgba(200,180,230,0.3));
+  transition: background 0.2s, transform 0.2s;
+  user-select: none;
+}
+
+.upload-btn:hover {
+  background: white;
+  transform: translateY(-2px);
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.detail-body {
+  padding: 16px;
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.detail-body::-webkit-scrollbar {
+  width: 3px;
+}
+
+.detail-body::-webkit-scrollbar-thumb {
+  background: var(--light-purple);
+  border-radius: 2px;
+}
+
+.detail-section {
+  margin-bottom: 14px;
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.detail-section-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-sub);
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.detail-section-content {
+  font-size: 12.5px;
+  color: var(--text-main);
+  line-height: 1.7;
+}
+
+/* 花期条 */
+.bloom-bar {
+  display: flex;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.bloom-month {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--light-purple);
+  position: relative;
+  transition: background 0.2s;
+}
+
+.bloom-month.active {
+  background: linear-gradient(90deg, var(--pink), var(--purple));
+  box-shadow: 0 1px 4px rgba(92, 156, 230, 0.5);
+}
+
+.bloom-month-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: var(--text-light);
+  margin-top: 3px;
+}
+
+/* 颜色展示 */
+.color-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.color-dot {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-sub);
+}
+
+.color-dot-circle {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* ============================================================
+   地球仪上的标记点
+   ============================================================ */
+
+.globe-marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: all;
+  cursor: pointer;
+  z-index: 5;
+}
+
+/* ============================================================
+   加载界面
+   ============================================================ */
+
+#loading {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: linear-gradient(135deg, #0a1628 0%, #0d2b4a 50%, #0d2040 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  transition: opacity 0.8s, visibility 0.8s;
+}
+
+#loading.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loading-title {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #B3E5FC 0%, #BBDEFB 50%, #90CAF9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 3px;
+  filter: drop-shadow(0 0 12px rgba(66, 165, 245, 0.5));
+}
+
+.loading-subtitle {
+  font-size: 13px;
+  color: var(--text-light);
+  letter-spacing: 2px;
+}
+
+.loading-flowers {
+  display: flex;
+  gap: 16px;
+  font-size: 28px;
+}
+
+.loading-flower {
+  animation: bounceIn 0.6s ease-out both;
+}
+
+.loading-flower:nth-child(1) { animation-delay: 0s; }
+.loading-flower:nth-child(2) { animation-delay: 0.1s; }
+.loading-flower:nth-child(3) { animation-delay: 0.2s; }
+.loading-flower:nth-child(4) { animation-delay: 0.3s; }
+.loading-flower:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0) rotate(-30deg); }
+  60% { transform: scale(1.3) rotate(10deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+.loading-bar-container {
+  width: 240px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.loading-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--pink), var(--purple));
+  border-radius: 2px;
+  transition: width 0.3s;
+  box-shadow: 0 0 8px rgba(66, 165, 245, 0.6);
+}
+
+.loading-text {
+  font-size: 12px;
+  color: var(--text-light);
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   提示气泡 (Tooltip)
+   ============================================================ */
+
+#tooltip {
+  position: absolute;
+  z-index: 15;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-main);
+  box-shadow: 0 4px 16px var(--shadow);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+}
+
+#tooltip.visible {
+  opacity: 1;
+}
+
+.tooltip-name {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.tooltip-info {
+  font-size: 10px;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+
+/* ============================================================
+   底部快捷操作
+   ============================================================ */
+
+#bottom-actions {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+  font-family: inherit;
+  backdrop-filter: blur(10px);
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(92, 156, 230, 0.3);
+}
+
+.action-btn.active {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: white;
+  box-shadow: 0 4px 12px rgba(66, 165, 245, 0.5);
+}
+
+/* ============================================================
+   打卡按钮样式
+   ============================================================ */
+
+.checkin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px 16px;
+  margin-top: 12px;
+  border-radius: 24px;
+  border: 2px solid var(--pink);
+  background: linear-gradient(135deg, rgba(66, 165, 245, 0.1), rgba(92, 156, 230, 0.1));
+  color: var(--pink);
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: 1px;
+}
+
+.checkin-btn:hover {
+  background: linear-gradient(135deg, rgba(66, 165, 245, 0.25), rgba(92, 156, 230, 0.25));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.checkin-btn.checked {
+  background: linear-gradient(135deg, #FFD700, #FFC107);
+  border-color: #FFD700;
+  color: #5D4037;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+.checkin-btn.checked:hover {
+  background: linear-gradient(135deg, #FFE44D, #FFD54F);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   打卡进度条
+   ============================================================ */
+
+#checkin-progress {
+  position: absolute;
+  bottom: 20px;
+  left: 16px;
+  z-index: 30;
+  background: rgba(10, 22, 40, 0.85);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 8px 16px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFD700;
+  letter-spacing: 0.5px;
+}
+
+#checkin-progress .progress-bar-wrap {
+  width: 80px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+#checkin-progress .progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFC107);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* ============================================================
+   颜色图例
+   ============================================================ */
+
+#color-legend {
+  position: absolute;
+  bottom: 60px;
+  left: 16px;
+  z-index: 10;
+  background: rgba(26, 10, 46, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  backdrop-filter: blur(10px);
+}
+
+.legend-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.legend-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+
+@media (max-width: 768px) {
+  #side-panel {
+    width: 280px;
+  }
+
+  #flower-detail {
+    width: calc(100vw - 32px);
+    left: 16px !important;
+    right: 16px !important;
+    max-height: calc(100vh - 100px);
+  }
+
+  .detail-image-wrap {
+    height: 120px;
+  }
+
+  .detail-body {
+    max-height: calc(100vh - 240px);
+  }
+
+  .header-title h1 {
+    font-size: 18px;
+  }
+}
+
+/* ============================================================
+   过渡动画
+   ============================================================ */
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ============================================================
+   高光发光效果
+   ============================================================ */
+
+.glow-text {
+  text-shadow: 0 0 8px currentColor;
+}
+
+.glow-box {
+  box-shadow: 0 0 12px rgba(66, 165, 245, 0.4),
+              0 0 24px rgba(92, 156, 230, 0.2);
+}
+
+/* ============================================================
+   Three.js Canvas
+   ============================================================ */
+
+#globe-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ============================================================
+   花形标记 SVG
+   ============================================================ */
+
+.marker-svg {
+  transition: transform 0.2s;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.marker-svg:hover {
+  transform: scale(1.4);
+  filter: drop-shadow(0 3px 8px rgba(66, 165, 245, 0.8));
+}
+
+.marker-svg.active {
+  transform: scale(1.3);
+  filter: drop-shadow(0 3px 8px rgba(255, 200, 0, 0.9));
+}
+
+/* 搜索结果高亮 */
+.highlight {
+  background: linear-gradient(135deg, rgba(66, 165, 245, 0.3), rgba(66, 165, 245, 0.3));
+  border-radius: 3px;
+  padding: 0 2px;
+}
