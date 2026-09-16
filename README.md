@@ -8,6 +8,9 @@
 
 直接在浏览器中打开 `landscape_global_show.html` 即可使用。
 
+<img width="1722" height="1074" alt="image" src="https://github.com/user-attachments/assets/d28c4673-5099-4633-bc50-4fc2dbb3ecf3" />
+<img width="1727" height="1078" alt="image" src="https://github.com/user-attachments/assets/50b5f702-4194-4516-9bea-694afcfb7554" />
+
 ## 功能特色
 
 - **3D 地球仪视图**：基于 Three.js 的可交互地球仪，景点标记分布在对应的地理位置上，支持拖拽旋转、缩放和自动旋转
